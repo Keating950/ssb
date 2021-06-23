@@ -98,7 +98,7 @@ mod tests {
 
     #[test]
     fn test_serialize() {
-        let mut b = Bookmarks::new();
+        let mut b = Bookmarks::new().unwrap();
         b.insert("hello", "world");
         b.insert("a", "b");
         b.insert("c", "d");
