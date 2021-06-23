@@ -82,6 +82,9 @@ fn start_ssh(addr: &str) {
         // NOTE: For whatever reason, likely a bug in the nix crate, the first element of execvp's
         // argv is ignored. This is why the variable tmp is being used here.
         let tmp = CStr::from_bytes_with_nul_unchecked(&[0]);
-        nix::unistd::execvp::<&CStr>(ssh_cmd, &[tmp, addr_cstr]);
+        match nix::unistd::execvp::<&CStr>(ssh_cmd, &[tmp, addr_cstr]) {
+            Ok(_) => (),
+            Err(_) => std::hint::unreachable_unchecked()
+        }
     }
 }
