@@ -1,0 +1,5 @@
+{
+    "rpi": "pi@raspberrypi",
+    "dev": "jsmith@devserver",
+    "foo": "bar@baz"
+}
