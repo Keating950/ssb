@@ -2,7 +2,7 @@
 ## Bookmarks for your ssh connections
 
 `ssb` is a small tool to make managing ssh connections easier. Instead of
-having to type `ssh user@hostname` each time, user/address combinations can
+having to type `ssh user@hostname` each time, user/hostname combinations can
 be saved and referred to by a shortform name.
 
 ## Usage
