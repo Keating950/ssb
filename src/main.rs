@@ -74,7 +74,7 @@ fn make_arg_parser() -> clap::App<'static, 'static> {
 }
 
 fn start_ssh(addr: &str) {
-    const SSH_CMD_BYTES: [u8; 4] = ['s' as u8, 's' as u8, 'h' as u8, 0];
+    const SSH_CMD_BYTES: [u8; 4] = *b"ssh\0";
     let addr_bytes: Vec<u8> = addr.as_bytes().iter().chain(&[0]).map(|c| *c).collect();
     unsafe {
         let ssh_cmd = CStr::from_bytes_with_nul_unchecked(&SSH_CMD_BYTES);
@@ -84,7 +84,7 @@ fn start_ssh(addr: &str) {
         let tmp = CStr::from_bytes_with_nul_unchecked(&[0]);
         match nix::unistd::execvp::<&CStr>(ssh_cmd, &[tmp, addr_cstr]) {
             Ok(_) => (),
-            Err(_) => std::hint::unreachable_unchecked()
+            Err(_) => std::hint::unreachable_unchecked(),
         }
     }
 }
