@@ -3,11 +3,11 @@ mod bookmarks;
 use crate::bookmarks::Bookmarks;
 use std::ffi::CStr;
 
-const LIST_SUBCOMMAND: &'static str = "-l";
-const REMOVE_SUBCOMMAND: &'static str = "-r";
-const ADD_SUBCOMMAND: &'static str = "-a";
-const KEY_ARGNAME: &'static str = "KEY";
-const VALUE_ARGNAME: &'static str = "VALUE";
+const LIST_SUBCOMMAND: &str = "-l";
+const REMOVE_SUBCOMMAND: &str = "-r";
+const ADD_SUBCOMMAND: &str = "-a";
+const KEY_ARGNAME: &str = "KEY";
+const VALUE_ARGNAME: &str = "VALUE";
 
 fn main() {
     if let Err(e) = try_main() {
@@ -75,7 +75,7 @@ fn make_arg_parser() -> clap::App<'static, 'static> {
 
 fn start_ssh(addr: &str) {
     const SSH_CMD_BYTES: [u8; 4] = *b"ssh\0";
-    let addr_bytes: Vec<u8> = addr.as_bytes().iter().chain(&[0]).map(|c| *c).collect();
+    let addr_bytes: Vec<u8> = addr.as_bytes().iter().chain(&[0]).copied().collect();
     unsafe {
         let ssh_cmd = CStr::from_bytes_with_nul_unchecked(&SSH_CMD_BYTES);
         let addr_cstr = CStr::from_bytes_with_nul_unchecked(&addr_bytes);

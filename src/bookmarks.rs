@@ -76,7 +76,7 @@ impl Bookmarks {
 
     fn save_to_path<T: AsRef<Path>>(&self, path: T) -> anyhow::Result<()> {
         let mut f = OpenOptions::new().write(true).create(true).open(path)?;
-        f.write(serde_json::to_string(self)?.as_bytes())?;
+        f.write_all(serde_json::to_string(self)?.as_bytes())?;
         Ok(())
     }
 }
