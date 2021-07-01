@@ -1,3 +1,4 @@
+mod bookmark;
 mod bookmarks;
 
 use crate::bookmarks::Bookmarks;
