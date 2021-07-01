@@ -50,7 +50,7 @@ impl Bookmarks {
         }
     }
 
-    pub fn insert<S: Into<String>>(&mut self, key: S, val: S) {
+    pub fn insert<T: Into<String>>(&mut self, key: T, val: T) {
         self.entries.insert(key.into(), val.into());
     }
 
