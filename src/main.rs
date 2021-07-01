@@ -54,17 +54,20 @@ fn make_arg_parser() -> clap::App<'static, 'static> {
         app_from_crate, crate_authors, crate_description, crate_name, crate_version, AppSettings,
         Arg, SubCommand,
     };
-    let list_subcommand = SubCommand::with_name(LIST_SUBCOMMAND).help("List bookmarks and exit.");
+    let list_subcommand = SubCommand::with_name(LIST_SUBCOMMAND).about("List bookmarks and exit.");
     let rm_subcommand = SubCommand::with_name(REMOVE_SUBCOMMAND)
-        .help("Remove a bookmark.")
+        .about("Remove a bookmark.")
         .arg(Arg::with_name(KEY_ARGNAME));
     let add_subcommand = SubCommand::with_name(ADD_SUBCOMMAND)
-        .help("Add a bookmark. Arguments should be in the format KEY USER@IP.")
+        .about("Add a bookmark. Arguments should be in the format KEY USER@IP.")
         .arg(Arg::with_name(KEY_ARGNAME))
         .arg(Arg::with_name(VALUE_ARGNAME));
     app_from_crate!()
-        .setting(AppSettings::ArgsNegateSubcommands)
-        .setting(AppSettings::SubcommandsNegateReqs)
+        .settings(&[
+            AppSettings::ArgsNegateSubcommands,
+            AppSettings::SubcommandsNegateReqs,
+            AppSettings::DisableHelpSubcommand,
+        ])
         .arg(
             Arg::with_name(KEY_ARGNAME)
                 .help("Bookmark to connect to.")
