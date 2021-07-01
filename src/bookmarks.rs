@@ -1,18 +1,13 @@
+use crate::bookmark::Bookmark;
 use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
-use std::{
-    collections::HashMap,
-    default::Default,
-    fmt,
-    fs,
-    path::Path,
-};
+use std::{collections::HashMap, default::Default, fmt, fs, path::Path};
 use xdg::BaseDirectories;
 
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Bookmarks {
     #[serde(flatten)]
-    entries: HashMap<String, String>,
+    entries: HashMap<String, Bookmark>,
 }
 
 impl fmt::Display for Bookmarks {
@@ -48,16 +43,16 @@ impl Bookmarks {
         }
     }
 
-    pub fn insert<T: Into<String>>(&mut self, key: T, val: T) {
-        self.entries.insert(key.into(), val.into());
+    pub fn insert(&mut self, key: &str, addr: &str, args: Option<&str>) {
+        let b = Bookmark {
+            addr: addr.to_string(),
+            args: args.map(|s| s.split_ascii_whitespace().map(String::from).collect()),
+        };
+        self.entries.insert(key.into(), b);
     }
 
-    pub fn remove(&mut self, key: &str) -> Option<String> {
+    pub fn remove(&mut self, key: &str) -> Option<Bookmark> {
         self.entries.remove(key)
-    }
-
-    pub fn get(&self, key: &str) -> Option<&str> {
-        self.entries.get(key).map(|s| s.as_str())
     }
 
     pub fn save(&self) -> anyhow::Result<()> {
@@ -97,9 +92,9 @@ mod tests {
     #[test]
     fn test_serialize() {
         let mut b = Bookmarks::new().unwrap();
-        b.insert("hello", "world");
-        b.insert("a", "b");
-        b.insert("c", "d");
+        b.insert("hello", "world", None);
+        b.insert("a", "b", Some("-i ~/.ssh/id_rsa"));
+        b.insert("c", "d", None);
         let json = serde_json::to_string(&b);
         assert_ok!(json);
         println!("{}", json.unwrap());

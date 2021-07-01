@@ -1,5 +1,12 @@
 {
-    "rpi": "pi@raspberrypi",
-    "dev": "jsmith@devserver",
-    "foo": "bar@baz"
+  "rpi": {
+    "addr": "pi@raspberrypi",
+    "args": ["-i", "~/.ssh/id_rsa"]
+  },
+  "dev": {
+    "addr": "jsmith@devserver"
+  },
+  "foo": {
+    "addr": "bar@baz"
+  }
 }
