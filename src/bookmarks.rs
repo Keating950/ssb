@@ -39,7 +39,6 @@ impl Bookmarks {
     const FILENAME: &'static str = "bookmarks.json";
 
     pub fn new() -> anyhow::Result<Bookmarks> {
-        Bookmarks::base_dirs().create_data_directory(env!("CARGO_PKG_NAME"))?;
         match Bookmarks::base_dirs().find_data_file(Bookmarks::FILENAME) {
             Some(f) => {
                 let text = read_to_string(f)?;
@@ -72,7 +71,7 @@ impl Bookmarks {
 
     fn base_dirs() -> &'static BaseDirectories {
         static XDG_ENTRIES: OnceCell<BaseDirectories> = OnceCell::new();
-        XDG_ENTRIES.get_or_init(|| BaseDirectories::new().unwrap())
+        XDG_ENTRIES.get_or_init(|| BaseDirectories::with_prefix(env!("CARGO_PKG_NAME")).unwrap())
     }
 
     fn save_to_path<T: AsRef<Path>>(&self, path: T) -> anyhow::Result<()> {
