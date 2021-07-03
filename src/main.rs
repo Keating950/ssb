@@ -45,7 +45,7 @@ fn try_main() -> anyhow::Result<()> {
             let val = bookmarks
                 .remove(key)
                 .ok_or_else(|| anyhow::anyhow!(anyhow::anyhow!(r#"Key "{}" not found."#, key)))?;
-            start_ssh(val);
+            start_ssh(val)?;
         }
         _ => unreachable!(),
     }
@@ -84,7 +84,7 @@ fn make_arg_parser() -> clap::App<'static, 'static> {
         .subcommands([list_subcommand, rm_subcommand, add_subcommand])
 }
 
-fn start_ssh(b: Bookmark) {
+fn start_ssh(b: Bookmark) -> Result<core::convert::Infallible, nix::Error> {
     const SSH_CMD_BYTES: [u8; 4] = *b"ssh\0";
     let bmark_cmd = b.into_cmd().unwrap();
     unsafe {
@@ -94,8 +94,8 @@ fn start_ssh(b: Bookmark) {
         let mut args = vec![CStr::from_bytes_with_nul_unchecked(&[0])];
         args.extend(bmark_cmd.iter().map(CString::as_c_str));
         match nix::unistd::execvp::<&CStr>(ssh_cmd, &args) {
-            Ok(_) => (),
-            Err(_) => std::hint::unreachable_unchecked(),
+            Ok(_) => unreachable!(),
+            Err(e) => Err(e),
         }
     }
 }
