@@ -55,3 +55,8 @@ foo -> bar@baz
 Bookmarks are stored in `$XDG_DATA_HOME/ssb/bookmarks.json,` or, if that
 environment variable is unset, `$HOME/.local/share/ssb/bookmarks.json`.
 
+## Compatibility
+As mentioned above, `ssb` relies on the `execvp` function provided for by the
+POSIX standard. Naturally, it won't work on Windows, but should on just about
+anything else.
+
