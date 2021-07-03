@@ -23,14 +23,15 @@ ARGS:
     <KEY>    Bookmark to connect to.
 
 SUBCOMMANDS:
-    -a    Add a bookmark. Arguments should be in the format KEY USER@IP.
+    -a    Add a new bookmark.
     -l    List bookmarks and exit.
     -r    Remove a bookmark.
 ```
 
 ### Adding/removing a bookmark
 ```
->>> ssb -a rpi pi@raspberrypi  # Adds a bookmark named 'rpi' that expands to pi@raspberrypi
+>>> ssb -a rpi pi@raspberrypi  # Adds a bookmark named 'rpi' that corresponds
+                               # to the address pi@raspberrypi
 >>> ssb -rm rpi  # Deletes the bookmark named 'rpi'
 ```
 
