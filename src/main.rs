@@ -101,9 +101,6 @@ fn start_ssh(b: Bookmark) -> Result<core::convert::Infallible, nix::Error> {
         // argv is ignored. This is why the variable tmp is being used here.
         let mut args = vec![CStr::from_bytes_with_nul_unchecked(&[0])];
         args.extend(bmark_cmd.iter().map(CString::as_c_str));
-        match nix::unistd::execvp::<&CStr>(ssh_cmd, &args) {
-            Ok(_) => unreachable!(),
-            Err(e) => Err(e),
-        }
+        nix::unistd::execvp(ssh_cmd, &args)
     }
 }
