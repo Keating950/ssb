@@ -22,8 +22,7 @@ impl Bookmark {
             }
             None => vec![self.addr.as_bytes().iter().copied().collect()],
         };
-        let out: Result<Vec<CString>, NulError> = arg_bytes.drain(..).map(CString::new).collect();
-        out
+        arg_bytes.drain(..).map(CString::new).collect()
     }
 }
 
