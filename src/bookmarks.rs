@@ -77,7 +77,6 @@ impl Bookmarks {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::fs::read_to_string;
 
     macro_rules! assert_ok {
         ($v:ident) => {
@@ -102,15 +101,16 @@ mod tests {
 
     #[test]
     fn test_deserialize() {
-        let text = read_to_string("test_data/test_data.json").unwrap();
+        let text = include_str!("../test_data/test_data.json");
         let b: Result<Bookmarks, _> = serde_json::from_str(&text);
         assert_ok!(b)
     }
 
     #[test]
     fn test_save_to_path() {
-        let text = read_to_string("test_data/test_data.json").unwrap();
+        let text = include_str!("../test_data/test_data.json");
         let b: Result<Bookmarks, _> = serde_json::from_str(&text);
+        assert_ok!(b);
         assert_ok!(b.unwrap().save_to_path("test_data/test_save.json"))
     }
 }
