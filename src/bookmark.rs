@@ -46,8 +46,16 @@ mod test {
                 args: Some(vec!["-i".to_string(), "~/.ssh/id_rsa".to_string()]),
             },
             Bookmark {
+                addr: "user@dev".to_string(),
+                args: None,
+            },
+            Bookmark {
                 addr: String::new(),
                 args: Some(vec![]),
+            },
+            Bookmark {
+                addr: String::new(),
+                args: None,
             },
         ];
         for b in inputs {

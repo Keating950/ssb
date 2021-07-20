@@ -60,11 +60,19 @@ fn make_arg_parser() -> clap::App<'static, 'static> {
     let list_subcommand = SubCommand::with_name(LIST_SUBCOMMAND).about("List bookmarks and exit.");
     let rm_subcommand = SubCommand::with_name(REMOVE_SUBCOMMAND)
         .about("Remove a bookmark.")
-        .arg(Arg::with_name(KEY_ARGNAME));
+        .arg(Arg::with_name(KEY_ARGNAME).required(true));
     let add_subcommand = SubCommand::with_name(ADD_SUBCOMMAND)
-        .about("Add a new bookmark.")
-        .arg(Arg::with_name(KEY_ARGNAME).help("Key to use for the new bookmark."))
-        .arg(Arg::with_name(ADDR_ARGNAME).help("Addresses should be in the format USER@IP."))
+        .about("Add a bookmark. Arguments should be in the format KEY USER@IP.")
+        .arg(
+            Arg::with_name(KEY_ARGNAME)
+                .help("Key to use for the new bookmark.")
+                .required(true),
+        )
+        .arg(
+            Arg::with_name(ADDR_ARGNAME)
+                .help("Addresses should be in the format USER@IP.")
+                .required(true),
+        )
         .arg(
             Arg::with_name(ARGS_ARGNAME)
                 .help("Custom arguments to pass to the ssh command, e.g. '-i ~/.ssh/id_rsa'.")
