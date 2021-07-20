@@ -84,9 +84,9 @@ fn make_arg_parser() -> clap::App<'static, 'static> {
         .subcommands([list_subcommand, rm_subcommand, add_subcommand])
 }
 
-fn start_ssh(b: Bookmark) -> Result<core::convert::Infallible, nix::Error> {
+fn start_ssh(b: Bookmark) -> anyhow::Result<core::convert::Infallible> {
     const SSH_CMD_BYTES: [u8; 4] = *b"ssh\0";
-    let bmark_cmd = b.into_cmd().unwrap();
+    let bmark_cmd = b.into_cmd()?;
     unsafe {
         let ssh_cmd = CStr::from_bytes_with_nul_unchecked(&SSH_CMD_BYTES);
         // NOTE: For whatever reason, likely a bug in the nix crate, the first element of execvp's
@@ -95,7 +95,7 @@ fn start_ssh(b: Bookmark) -> Result<core::convert::Infallible, nix::Error> {
         args.extend(bmark_cmd.iter().map(CString::as_c_str));
         match nix::unistd::execvp::<&CStr>(ssh_cmd, &args) {
             Ok(_) => unreachable!(),
-            Err(e) => Err(e),
+            Err(e) => Err(e.into()),
         }
     }
 }

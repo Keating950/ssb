@@ -13,17 +13,16 @@ pub struct Bookmark {
 
 impl Bookmark {
     pub fn into_cmd(self) -> Result<Vec<CString>, NulError> {
-        let mut arg_bytes: Vec<Vec<u8>> = match self.args {
+        match self.args {
             Some(mut args) => {
                 args.push(self.addr);
-                args.drain(..)
-                    .map(|s| s.as_bytes().iter().copied().collect())
-                    .collect()
+                Ok(args
+                    .drain(..)
+                    .map(|s| CString::new(s.as_bytes()))
+                    .collect::<Result<Vec<CString>, NulError>>()?)
             }
-            None => vec![self.addr.as_bytes().iter().copied().collect()],
-        };
-        let out: Result<Vec<CString>, NulError> = arg_bytes.drain(..).map(CString::new).collect();
-        out
+            None => Ok(vec![CString::new(self.addr.as_bytes())?]),
+        }
     }
 }
 
