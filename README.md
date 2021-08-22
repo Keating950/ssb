@@ -1,5 +1,5 @@
 # ssb
-ssb 0.1.0  
+ssb 1.0.0  
 Keating Reid <keating.reid@pm.me>  
 Bookmarks for your ssh connections
 
