@@ -95,12 +95,10 @@ fn make_arg_parser() -> clap::App<'static, 'static> {
 fn start_ssh(b: Bookmark) -> Result<core::convert::Infallible, nix::Error> {
     const SSH_CMD_BYTES: [u8; 4] = *b"ssh\0";
     let bmark_cmd = b.into_cmd().unwrap();
-    unsafe {
-        let ssh_cmd = CStr::from_bytes_with_nul_unchecked(&SSH_CMD_BYTES);
-        // NOTE: For whatever reason, likely a bug in the nix crate, the first element of execvp's
-        // argv is ignored. This is why the variable tmp is being used here.
-        let mut args = vec![CStr::from_bytes_with_nul_unchecked(&[0])];
-        args.extend(bmark_cmd.iter().map(CString::as_c_str));
-        nix::unistd::execvp(ssh_cmd, &args)
-    }
+    let ssh_cmd = CStr::from_bytes_with_nul(&SSH_CMD_BYTES).unwrap();
+    // NOTE: For whatever reason, likely a bug in the nix crate, the first element of execvp's
+    //       argv is ignored. This is why the variable tmp is being used here.
+    let mut args = vec![CStr::from_bytes_with_nul(&[0]).unwrap()];
+    args.extend(bmark_cmd.iter().map(CString::as_ref));
+    nix::unistd::execvp(ssh_cmd, &args)
 }
