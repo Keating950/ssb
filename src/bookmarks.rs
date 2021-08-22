@@ -36,8 +36,7 @@ impl Bookmarks {
         match Bookmarks::base_dirs().find_data_file(Bookmarks::FILENAME) {
             Some(f) => {
                 let text = fs::read_to_string(f)?;
-                let b: Bookmarks = serde_json::from_str(&text)?;
-                Ok(b)
+                Ok(serde_json::from_str(&text)?)
             }
             None => Ok(Bookmarks::default()),
         }
@@ -69,8 +68,7 @@ impl Bookmarks {
     }
 
     fn save_to_path<T: AsRef<Path>>(&self, path: T) -> anyhow::Result<()> {
-        fs::write(path, serde_json::to_string(self)?.as_bytes())?;
-        Ok(())
+        fs::write(path, serde_json::to_string(self)?.as_bytes()).map_err(|e| e.into())
     }
 }
 
