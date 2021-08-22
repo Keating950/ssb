@@ -5,7 +5,7 @@ use crate::{bookmark::Bookmark, bookmarks::Bookmarks};
 use std::ffi::{CStr, CString};
 
 const LIST_SUBCOMMAND: &str = "-l";
-const REMOVE_SUBCOMMAND: &str = "-r";
+const REMOVE_SUBCOMMAND: &str = "-rm";
 const ADD_SUBCOMMAND: &str = "-a";
 const KEY_ARGNAME: &str = "KEY";
 const ADDR_ARGNAME: &str = "VALUE";
