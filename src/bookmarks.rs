@@ -1,4 +1,5 @@
 use crate::bookmark::Bookmark;
+use anyhow::Context;
 use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, default::Default, fmt, fs, path::Path};
@@ -36,7 +37,12 @@ impl Bookmarks {
         match Bookmarks::base_dirs().find_data_file(Bookmarks::FILENAME) {
             Some(f) => {
                 let text = fs::read_to_string(f)?;
-                Ok(serde_json::from_str(&text)?)
+                if text.is_empty() {
+                    Ok(Bookmarks::default())
+                } else {
+                    Ok(serde_json::from_str(&text)
+                        .with_context(|| "Failed to deserialize bookmarks.json")?)
+                }
             }
             None => Ok(Bookmarks::default()),
         }
