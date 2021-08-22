@@ -74,7 +74,7 @@ impl Bookmarks {
     }
 
     fn save_to_path<T: AsRef<Path>>(&self, path: T) -> anyhow::Result<()> {
-        fs::write(path, serde_json::to_string(self)?.as_bytes()).map_err(|e| e.into())
+        fs::write(path, serde_json::to_string_pretty(self)?.as_bytes()).map_err(|e| e.into())
     }
 }
 
