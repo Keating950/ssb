@@ -44,7 +44,7 @@ fn try_main() -> anyhow::Result<()> {
             let key = app.value_of(KEY_ARGNAME).unwrap();
             let val = bookmarks
                 .remove(key)
-                .ok_or_else(|| anyhow::anyhow!(anyhow::anyhow!(r#"Key "{}" not found."#, key)))?;
+                .ok_or_else(|| anyhow::anyhow!(r#"Key "{}" not found."#, key))?;
             start_ssh(val)?;
         }
         _ => unreachable!(),
