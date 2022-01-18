@@ -33,15 +33,15 @@ impl fmt::Display for Bookmarks {
 impl Bookmarks {
     const FILENAME: &'static str = "bookmarks.json";
 
-    pub fn new() -> anyhow::Result<Bookmarks> {
+    pub fn load() -> anyhow::Result<Bookmarks> {
         match Bookmarks::base_dirs().find_data_file(Bookmarks::FILENAME) {
             Some(f) => {
-                let text = fs::read_to_string(f)?;
+                let text = fs::read_to_string(&f)?;
                 if text.is_empty() {
                     Ok(Bookmarks::default())
                 } else {
                     Ok(serde_json::from_str(&text)
-                        .with_context(|| "Failed to deserialize bookmarks.json")?)
+                        .with_context(move || format!("Failed to deserialize {}", f.display()))?)
                 }
             }
             None => Ok(Bookmarks::default()),
@@ -94,7 +94,7 @@ mod tests {
 
     #[test]
     fn test_serialize() {
-        let mut b = Bookmarks::new().unwrap();
+        let mut b = Bookmarks::load().unwrap();
         b.insert("hello", "world", None);
         b.insert("a", "b", Some("-i ~/.ssh/id_rsa"));
         b.insert("c", "d", None);

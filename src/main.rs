@@ -20,7 +20,7 @@ fn main() {
 
 fn try_main() -> anyhow::Result<()> {
     let app = make_arg_parser().get_matches();
-    let mut bookmarks = Bookmarks::new()?;
+    let mut bookmarks = Bookmarks::load()?;
     match app.subcommand() {
         (LIST_SUBCOMMAND, _) => {
             println!("{}", bookmarks)
