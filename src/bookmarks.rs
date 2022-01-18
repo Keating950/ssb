@@ -56,6 +56,10 @@ impl Bookmarks {
         self.entries.insert(key.into(), b);
     }
 
+    pub fn get(&self, key: &str) -> Option<&Bookmark> {
+        self.entries.get(key)
+    }
+
     pub fn remove(&mut self, key: &str) -> Option<Bookmark> {
         self.entries.remove(key)
     }

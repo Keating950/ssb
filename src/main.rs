@@ -2,7 +2,10 @@ mod bookmark;
 mod bookmarks;
 
 use crate::{bookmark::Bookmark, bookmarks::Bookmarks};
-use std::ffi::{CStr, CString};
+use std::{
+    ffi::{CStr, CString},
+    io::{self, prelude::*},
+};
 
 const LIST_SUBCOMMAND: &str = "-l";
 const REMOVE_SUBCOMMAND: &str = "-rm";
@@ -33,8 +36,22 @@ fn try_main() -> anyhow::Result<()> {
             bookmarks.save()?;
         }
         (ADD_SUBCOMMAND, Some(args)) => {
+            let key = args.value_of(KEY_ARGNAME).unwrap();
+            if let Some(bmark) = bookmarks.get(key) {
+                let mut buf = String::default();
+                print!(
+                    "A bookmark named \"{}\" already exists. Overwrite it?\n{}\n[y/n]: ",
+                    key, bmark
+                );
+                io::stdout().flush()?;
+                let stdin = io::stdin();
+                stdin.lock().read_line(&mut buf)?;
+                if !matches!(buf.as_str(), "Y" | "y") {
+                    return Ok(());
+                }
+            }
             bookmarks.insert(
-                args.value_of(KEY_ARGNAME).unwrap(),
+                key,
                 args.value_of(ADDR_ARGNAME).unwrap(),
                 args.value_of(ARGS_ARGNAME),
             );
