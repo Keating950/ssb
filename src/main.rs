@@ -117,3 +117,17 @@ fn start_ssh(b: Bookmark) -> Result<core::convert::Infallible, nix::Error> {
     args.extend(bmark_cmd.iter().map(CString::as_ref));
     nix::unistd::execvp(ssh_cmd, &args)
 }
+
+
+#[cfg(test)]
+#[macro_export]
+macro_rules! assert_ok {
+    ($v:ident) => {
+        assert!($v.is_ok(), "{}", $v.unwrap_err())
+    };
+    ($e:expr) => {{
+        let tmp = $e;
+        assert!(tmp.is_ok(), "{}", tmp.unwrap_err())
+    }};
+}
+

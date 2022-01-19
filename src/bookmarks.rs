@@ -85,16 +85,7 @@ impl Bookmarks {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    macro_rules! assert_ok {
-        ($v:ident) => {
-            assert!($v.is_ok(), "{}", $v.unwrap_err())
-        };
-        ($e:expr) => {{
-            let tmp = $e;
-            assert!(tmp.is_ok(), "{}", tmp.unwrap_err())
-        }};
-    }
+    use crate::assert_ok;
 
     #[test]
     fn test_serialize() {

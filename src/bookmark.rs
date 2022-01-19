@@ -38,6 +38,8 @@ impl fmt::Display for Bookmark {
 #[cfg(test)]
 mod test {
     use super::*;
+    use crate::assert_ok;
+
     #[test]
     fn test_serialize() {
         let inputs = [
@@ -59,8 +61,7 @@ mod test {
             },
         ];
         for b in inputs {
-            let res = serde_json::to_string(&b);
-            assert!(res.is_ok(), "{}", res.unwrap_err());
+            assert_ok!(serde_json::to_string(&b))
         }
     }
 
@@ -76,7 +77,7 @@ mod test {
             args: Some(vec!["-i".to_string(), "~/.ssh/id_rsa".to_string()]),
         };
         let cmd = b.into_cmd();
-        assert!(cmd.is_ok(), "{}", cmd.unwrap_err());
+        assert_ok!(cmd);
         assert_eq!(
             cmd.unwrap(),
             vec![cstr!("-i"), cstr!("~/.ssh/id_rsa"), cstr!("user@dev"),]
