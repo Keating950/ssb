@@ -16,7 +16,7 @@ const ARGS_ARGNAME: &str = "args";
 
 fn main() {
     if let Err(e) = try_main() {
-        eprintln!("{:?}", e);
+        eprintln!("{}", e);
         std::process::exit(1)
     }
 }
