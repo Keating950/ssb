@@ -1,7 +1,7 @@
 mod bookmark;
 mod bookmarks;
 
-use crate::{bookmark::Bookmark, bookmarks::Bookmarks};
+use crate::bookmarks::Bookmarks;
 use std::{
     ffi::{CStr, CString},
     io::{self, prelude::*},
@@ -62,7 +62,8 @@ fn try_main() -> anyhow::Result<()> {
             let val = bookmarks
                 .remove(key)
                 .ok_or_else(|| anyhow::anyhow!(r#"Key "{}" not found."#, key))?;
-            start_ssh(val)?;
+            let cmd = val.into_cmd()?;
+            start_ssh(cmd.iter().map(CString::as_ref))?;
         }
         _ => unreachable!(),
     }
@@ -104,12 +105,14 @@ fn make_arg_parser() -> clap::App<'static> {
         .subcommands([list_subcommand, rm_subcommand, add_subcommand])
 }
 
-fn start_ssh(b: Bookmark) -> Result<core::convert::Infallible, nix::Error> {
+fn start_ssh<'a, T>(cmd: T) -> Result<core::convert::Infallible, nix::Error>
+where
+    T: Iterator<Item = &'a CStr>,
+{
     const SSH_CMD_BYTES: [u8; 4] = *b"ssh\0";
-    let bmark_cmd = b.into_cmd().unwrap();
     let ssh_cmd = CStr::from_bytes_with_nul(&SSH_CMD_BYTES).unwrap();
     let mut args = vec![ssh_cmd];
-    args.extend(bmark_cmd.iter().map(CString::as_ref));
+    args.extend(cmd);
     nix::unistd::execvp(ssh_cmd, &args)
 }
 

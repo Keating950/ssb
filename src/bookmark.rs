@@ -14,13 +14,11 @@ pub struct Bookmark {
 impl Bookmark {
     pub fn into_cmd(self) -> Result<Vec<CString>, NulError> {
         match self.args {
-            Some(mut args) => {
-                args.push(self.addr);
-                Ok(args
-                    .drain(..)
-                    .map(|s| CString::new(s.as_bytes()))
-                    .collect::<Result<Vec<CString>, NulError>>()?)
-            }
+            Some(mut args) => Ok(args
+                .drain(..)
+                .chain([self.addr])
+                .map(|s| CString::new(s.as_bytes()))
+                .collect::<Result<Vec<CString>, NulError>>()?),
             None => Ok(vec![CString::new(self.addr.as_bytes())?]),
         }
     }
