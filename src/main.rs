@@ -38,15 +38,12 @@ fn try_main() -> anyhow::Result<()> {
         Some((ADD_SUBCOMMAND, args)) => {
             let key = args.value_of(KEY_ARGNAME).unwrap();
             if let Some(bmark) = bookmarks.get(key) {
-                let mut buf = String::default();
-                print!(
+                let msg = format!(
                     "A bookmark named \"{}\" already exists. Overwrite it?\n{}\n[y/n]: ",
                     key, bmark
                 );
-                io::stdout().flush()?;
-                let stdin = io::stdin();
-                stdin.lock().read_line(&mut buf)?;
-                if !matches!(buf.as_str(), "Y" | "y") {
+                let ln = get_line(&msg)?;
+                if !matches!(ln.as_str(), "Y" | "y") {
                     return Ok(());
                 }
             }
@@ -103,6 +100,18 @@ fn make_arg_parser() -> clap::App<'static> {
                 .required(true),
         )
         .subcommands([list_subcommand, rm_subcommand, add_subcommand])
+}
+
+fn get_line(msg: &str) -> io::Result<String> {
+    let mut buf = String::default();
+    print!("{}", msg);
+    io::stdout().flush()?;
+    let stdin = io::stdin();
+    stdin.lock().read_line(&mut buf)?;
+    if !buf.is_empty() {
+        buf.truncate(buf.len() - 1);
+    }
+    Ok(buf)
 }
 
 fn start_ssh<'a, T>(cmd: T) -> Result<core::convert::Infallible, nix::Error>
