@@ -20,3 +20,4 @@ xdg = "2.4.1"
 [profile.release]
 opt-level = "z" # Optimize for a small binary
 lto = "thin"
+strip = true
