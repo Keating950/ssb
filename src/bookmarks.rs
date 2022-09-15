@@ -21,9 +21,9 @@ impl fmt::Display for Bookmarks {
             .unwrap_or_default();
         for (i, (k, v)) in self.entries.iter().enumerate() {
             if i < self.entries.len() - 1 {
-                writeln!(f, "{:>width$} -> {}", k, v, width = width)?;
+                writeln!(f, "{:>width$} -> {}", k, v)?;
             } else {
-                write!(f, "{:>width$} -> {}", k, v, width = width)?;
+                write!(f, "{:>width$} -> {}", k, v)?;
             }
         }
         Ok(())
