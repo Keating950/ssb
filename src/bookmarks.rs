@@ -41,7 +41,7 @@ impl Bookmarks {
                     Ok(Bookmarks::default())
                 } else {
                     Ok(serde_json::from_str(&text)
-                        .with_context(move || format!("Failed to deserialize {}", f.display()))?)
+                        .with_context(|| format!("Failed to deserialize {}", f.display()))?)
                 }
             }
             None => Ok(Bookmarks::default()),
