@@ -1,3 +1,4 @@
+#![warn(clippy::all, clippy::pedantic)]
 mod args;
 mod bookmark;
 mod bookmarks;
@@ -13,7 +14,7 @@ use std::{
 
 fn main() {
     if let Err(e) = try_main() {
-        eprintln!("{}", e);
+        eprintln!("{e}");
         std::process::exit(1)
     }
 }
@@ -23,7 +24,7 @@ fn try_main() -> anyhow::Result<()> {
     let mut bookmarks = Bookmarks::load()?;
     match args.command {
         Some(Command::List) => {
-            println!("{}", bookmarks)
+            println!("{bookmarks}");
         }
         Some(Command::Rm { key }) => {
             if bookmarks.remove(&key).is_none() {
@@ -59,7 +60,7 @@ fn try_main() -> anyhow::Result<()> {
 
 fn get_line(msg: &str) -> io::Result<String> {
     let mut buf = String::default();
-    print!("{}", msg);
+    print!("{msg}");
     io::stdout().flush()?;
     let stdin = io::stdin();
     stdin.lock().read_line(&mut buf)?;

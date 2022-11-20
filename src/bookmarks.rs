@@ -21,9 +21,9 @@ impl fmt::Display for Bookmarks {
             .unwrap_or_default();
         for (i, (k, v)) in self.entries.iter().enumerate() {
             if i < self.entries.len() - 1 {
-                writeln!(f, "{:>width$} -> {}", k, v)?;
+                writeln!(f, "{k:>width$} -> {v}")?;
             } else {
-                write!(f, "{:>width$} -> {}", k, v)?;
+                write!(f, "{k:>width$} -> {v}")?;
             }
         }
         Ok(())
@@ -78,7 +78,8 @@ impl Bookmarks {
     }
 
     fn save_to_path<T: AsRef<Path>>(&self, path: T) -> anyhow::Result<()> {
-        fs::write(path, serde_json::to_string_pretty(self)?.as_bytes()).map_err(|e| e.into())
+        fs::write(path, serde_json::to_string_pretty(self)?.as_bytes())
+            .map_err(std::convert::Into::into)
     }
 }
 

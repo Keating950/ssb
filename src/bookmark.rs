@@ -27,7 +27,7 @@ impl Bookmark {
 impl fmt::Display for Bookmark {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match &self.args {
-            Some(args) => write!(f, "(addr: {}, args: {:?})", self.addr, args),
+            Some(args) => write!(f, "(addr: {}, args: {args:?})", self.addr),
             None => write!(f, "(addr: {})", self.addr),
         }
     }
