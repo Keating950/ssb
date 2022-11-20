@@ -21,3 +21,4 @@ xdg = "2.4.1"
 opt-level = "z" # Optimize for a small binary
 lto = "thin"
 strip = true
+codegen-units = 1
