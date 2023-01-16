@@ -44,11 +44,9 @@ foo -> (addr: bar@baz)
 dev -> (addr: jsmith@devserver)
 ```
 
-
 # Bookmark file location
 Bookmarks are stored in `$XDG_DATA_HOME/ssb/bookmarks.json,` or, if that
 environment variable is unset, `$HOME/.local/share/ssb/bookmarks.json`.
-
 
 # Compatibility
 As mentioned above, `ssb` relies on the `execvp` function provided for by the
