@@ -14,7 +14,7 @@ use std::{
 
 fn main() {
     if let Err(e) = try_main() {
-        eprintln!("{e}");
+        eprintln!("error: {e}");
         std::process::exit(1)
     }
 }
